@@ -2,12 +2,14 @@
 package de.converter.abap.generator;
 
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Class;
 
 public final class CodeGenFacade implements IFCodeGen {
 
 	private Classifier classifier;
 	private final String constantClass = "CLASS";
+	private final String constantInterface = "INTERFACE";
 
 	@Override
 	public CharSequence getCode() {
@@ -15,8 +17,11 @@ public final class CodeGenFacade implements IFCodeGen {
 		System.out.println("Classifier Type: " + classifierType);
 
 		if (classifierType.equals(constantClass)) {
-			System.out.println("Convert class");
+			System.out.println("Convert Class");
 			return AbapClassGenerator.getCode((Class) getClassifier());
+		} else if (classifierType.equals(constantInterface)) {
+			System.out.println("Convert Interface");
+			return AbapInterfaceGenerator.getCode((Interface) getClassifier());
 		} else {
 			return null;
 		}

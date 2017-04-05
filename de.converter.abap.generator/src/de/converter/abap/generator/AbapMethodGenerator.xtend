@@ -3,6 +3,7 @@ package de.converter.abap.generator
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.VisibilityKind
+import org.eclipse.uml2.uml.Interface
 
 class AbapMethodGenerator {
 	static def generateMethods(Class umlClass, VisibilityKind visibility) '''
@@ -12,21 +13,29 @@ class AbapMethodGenerator {
 				«generateSingleMethod(operation)»
 			«ENDIF»
 		«ENDFOR»
-		
 	'''
-	
-	static def generateParameters(Operation operation)'''
+
+	static def generateMethods(Interface umlInterface, VisibilityKind visibility) '''
+		«FOR operation : umlInterface.ownedOperations»
+			«IF operation.visibility == visibility»
+				«AbapDocGenerator.generateAbapDoc(operation)»
+				«generateSingleMethod(operation)»
+			«ENDIF»
+		«ENDFOR»
+	'''
+
+	static def generateParameters(Operation operation) '''
 		«IF operation.inputParameters.length > 0»
-				IMPORTING 
-					«FOR input : operation.inputParameters»
+			IMPORTING 
+				«FOR input : operation.inputParameters»
 					«input.name» TYPE «IF input.type != null»«input.type.name»«ELSE»ANY«ENDIF»
-					«ENDFOR»
+				«ENDFOR»
 		«ENDIF»
 		«IF operation.outputParameters.length > 0»
-				EXPORTING 
-					«FOR output : operation.outputParameters»
+			EXPORTING 
+				«FOR output : operation.outputParameters»
 					«output.name» TYPE «IF output.type != null»«output.type.name»«ELSE»ANY«ENDIF»
-					«ENDFOR»	
+				«ENDFOR»	
 		«ENDIF»
 	'''
 

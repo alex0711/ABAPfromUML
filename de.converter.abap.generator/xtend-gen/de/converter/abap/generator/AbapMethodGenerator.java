@@ -3,6 +3,7 @@ package de.converter.abap.generator;
 import com.google.common.base.Objects;
 import de.converter.abap.generator.AbapDocGenerator;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
@@ -31,7 +32,28 @@ public class AbapMethodGenerator {
         }
       }
     }
-    _builder.newLine();
+    return _builder;
+  }
+  
+  public static CharSequence generateMethods(final Interface umlInterface, final VisibilityKind visibility) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      EList<Operation> _ownedOperations = umlInterface.getOwnedOperations();
+      for(final Operation operation : _ownedOperations) {
+        {
+          VisibilityKind _visibility = operation.getVisibility();
+          boolean _equals = Objects.equal(_visibility, visibility);
+          if (_equals) {
+            CharSequence _generateAbapDoc = AbapDocGenerator.generateAbapDoc(operation);
+            _builder.append(_generateAbapDoc, "");
+            _builder.newLineIfNotEmpty();
+            CharSequence _generateSingleMethod = AbapMethodGenerator.generateSingleMethod(operation);
+            _builder.append(_generateSingleMethod, "");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
     return _builder;
   }
   
