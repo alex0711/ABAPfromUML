@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+         <command
+               commandId="de.converter.abap.ui.generate"
+               label="Generate ABAP Code"
+               style="push"
+               tooltip="Generate some ABAP code">
+            <visibleWhen checkEnabled="true">
+               <with variable="activeMenuSelection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <adapt type="org.eclipse.core.resources.IResource">
+				     	<test property="org.eclipse.core.resources.name" value="*.uml" />
+				     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="de.converter.abap.ui.handler.ConvertHandler"
+            description="Code Generation for ABAP"
+            id="de.converter.abap.ui.generate"
+            name="Generate ABAP Code">
+      </command>
+   </extension>
+
+</plugin>
