@@ -19,24 +19,34 @@ public class AbapInterfaceRealizationGeneration {
       if (_greaterThan) {
         _builder.append("INTERFACES:");
         _builder.newLine();
-        {
-          EList<Interface> _directlyRealizedInterfaces_1 = umlClass.directlyRealizedInterfaces();
-          boolean _hasElements = false;
-          for(final Interface interf : _directlyRealizedInterfaces_1) {
-            if (!_hasElements) {
-              _hasElements = true;
-            } else {
-              _builder.appendImmediate(",", "");
-            }
-            String _name = interf.getName();
-            String _upperCase = _name.toUpperCase();
-            _builder.append(_upperCase, "");
-            _builder.newLineIfNotEmpty();
-          }
-          if (_hasElements) {
-            _builder.append(".", "");
-          }
+        _builder.append("\t");
+        CharSequence _generatesingleIFName = AbapInterfaceRealizationGeneration.generatesingleIFName(umlClass);
+        String _string = _generatesingleIFName.toString();
+        String _trim = _string.trim();
+        _builder.append(_trim, "\t");
+        _builder.append(".");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    return _builder;
+  }
+  
+  private static CharSequence generatesingleIFName(final org.eclipse.uml2.uml.Class umlClass) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      EList<Interface> _directlyRealizedInterfaces = umlClass.directlyRealizedInterfaces();
+      boolean _hasElements = false;
+      for(final Interface interf : _directlyRealizedInterfaces) {
+        if (!_hasElements) {
+          _hasElements = true;
+        } else {
+          _builder.appendImmediate(",", "");
         }
+        String _name = interf.getName();
+        String _upperCase = _name.toUpperCase();
+        _builder.append(_upperCase, "");
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t\t");
       }
     }
     return _builder;
@@ -59,7 +69,10 @@ public class AbapInterfaceRealizationGeneration {
                 _builder.append(_generateAbapDoc, "");
                 _builder.newLineIfNotEmpty();
                 CharSequence _generateSingleIFMethod = AbapInterfaceRealizationGeneration.generateSingleIFMethod(interf, operation);
-                _builder.append(_generateSingleIFMethod, "");
+                String _string = _generateSingleIFMethod.toString();
+                String _trim = _string.trim();
+                _builder.append(_trim, "");
+                _builder.append(".");
               }
             }
             _builder.newLineIfNotEmpty();
@@ -81,7 +94,6 @@ public class AbapInterfaceRealizationGeneration {
     _builder.append(" ");
     CharSequence _generateParameters = AbapMethodGenerator.generateParameters(operation);
     _builder.append(_generateParameters, "");
-    _builder.append(".");
     _builder.newLineIfNotEmpty();
     return _builder;
   }

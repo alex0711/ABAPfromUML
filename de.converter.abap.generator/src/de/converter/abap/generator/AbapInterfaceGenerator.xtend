@@ -6,7 +6,8 @@ import org.eclipse.uml2.uml.VisibilityKind
 class AbapInterfaceGenerator {
 	static def getCode(Interface umlInterface)'''
 	INTERFACE «umlInterface.name.toString».
-		«AbapMethodGenerator.generateMethods(umlInterface, VisibilityKind.PUBLIC_LITERAL)»
+		«AbapAttributeGenerator.generateAttributes(umlInterface.ownedAttributes, VisibilityKind.PUBLIC_LITERAL).toString.trim»
+		«AbapMethodGenerator.generateMethods(umlInterface.ownedOperations, VisibilityKind.PUBLIC_LITERAL).toString.trim»
 	ENDINTERFACE.
 	'''
 	}

@@ -10,11 +10,10 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 
 @SuppressWarnings("all")
 public class AbapAttributeGenerator {
-  public static CharSequence generateAttributes(final org.eclipse.uml2.uml.Class Class, final VisibilityKind Visibility) {
+  public static CharSequence generateAttributes(final EList<Property> AttributeList, final VisibilityKind Visibility) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      EList<Property> _allAttributes = Class.getAllAttributes();
-      for(final Property attribute : _allAttributes) {
+      for(final Property attribute : AttributeList) {
         {
           VisibilityKind _visibility = attribute.getVisibility();
           boolean _equals = Objects.equal(_visibility, Visibility);

@@ -2,11 +2,11 @@ package de.converter.abap.generator
 
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.Property
-import org.eclipse.uml2.uml.Class
+import org.eclipse.emf.common.util.EList
 
 class AbapAttributeGenerator {
-	static def generateAttributes(Class Class, VisibilityKind Visibility) '''
-		«FOR attribute : Class.getAllAttributes»
+	static def generateAttributes(EList<Property> AttributeList, VisibilityKind Visibility) '''
+		«FOR attribute : AttributeList»
 			«IF attribute.visibility == Visibility»
 				«generateSingleAttribute(attribute)»
 			«ENDIF»

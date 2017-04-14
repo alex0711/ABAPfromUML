@@ -8,18 +8,22 @@ class AbapClassGenerator {
  	static def getCode(Class umlClass)'''
 	«generateClassHeader(umlClass)»
 		PUBLIC SECTION.
-		«AbapInterfaceRealizationGeneration.generateInterfaceRealization(umlClass)»
-		«AbapInterfaceRealizationGeneration.generateInterfaceMethodDefinition(umlClass)»
-		«AbapMethodGenerator.generateMethods(umlClass, VisibilityKind.PUBLIC_LITERAL)»
-		«AbapAttributeGenerator.generateAttributes(umlClass, VisibilityKind.PUBLIC_LITERAL)»
+		«AbapInterfaceRealizationGeneration.generateInterfaceRealization(umlClass).toString.trim»
+		
+		«AbapInterfaceRealizationGeneration.generateInterfaceMethodDefinition(umlClass).toString.trim»
+		«AbapMethodGenerator.generateMethods(umlClass.ownedOperations, VisibilityKind.PUBLIC_LITERAL).toString.trim»
+		
+		«AbapAttributeGenerator.generateAttributes(umlClass.ownedAttributes, VisibilityKind.PUBLIC_LITERAL).toString.trim»
 		
 		PROTECTED SECTION.
-		«AbapMethodGenerator.generateMethods(umlClass, VisibilityKind.PROTECTED_LITERAL)»
-		«AbapAttributeGenerator.generateAttributes(umlClass, VisibilityKind.PROTECTED_LITERAL)»
+		«AbapMethodGenerator.generateMethods(umlClass.ownedOperations, VisibilityKind.PROTECTED_LITERAL).toString.trim»
+		
+		«AbapAttributeGenerator.generateAttributes(umlClass.ownedAttributes, VisibilityKind.PROTECTED_LITERAL).toString.trim»
 		
 		PRIVATE SECTION.
-		«AbapMethodGenerator.generateMethods(umlClass, VisibilityKind.PRIVATE_LITERAL)»
-		«AbapAttributeGenerator.generateAttributes(umlClass, VisibilityKind.PRIVATE_LITERAL)»
+		«AbapMethodGenerator.generateMethods(umlClass.ownedOperations, VisibilityKind.PRIVATE_LITERAL).toString.trim»
+		
+		«AbapAttributeGenerator.generateAttributes(umlClass.ownedAttributes, VisibilityKind.PRIVATE_LITERAL).toString.trim»
 	ENDCLASS.
 	
 	CLASS «umlClass.name» IMPLEMENTATION.
