@@ -8,13 +8,19 @@ Generates ABAP Code from UML Diagramms
 
 Features:
 * ABAP DOC
-	Create ABAP DOC for Methods and Attributes
-	Can handle UML Comments applied to your Methods and Attributes to create meaningful ABAP DOC
+
+Create ABAP DOC for Methods and Attributes
+
+Can handle UML Comments applied to your Methods and Attributes to create meaningful ABAP DOC
 
 * Interface Generation
-	Generate Methods and Attributes
+
+Generate Methods and Attributes
 	
 * Class Generation
-	Creates Interface Realization with Methods and Attributes
-	Handles Inheritence of other classes
-	Creates Methods and Attributes, handling types and direction correctly
+
+Creates Interface Realization with Methods and Attributes
+
+Handles Inheritence of other classes
+
+Creates Methods and Attributes, handling types and direction correctly
