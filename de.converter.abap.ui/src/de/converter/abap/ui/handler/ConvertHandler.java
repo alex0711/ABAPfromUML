@@ -1,5 +1,7 @@
 package de.converter.abap.ui.handler;
 
+import java.util.List;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -42,40 +44,17 @@ public class ConvertHandler extends AbstractHandler {
 				IFolder srcGenFolder = project.getFolder("src-gen");
 				if (!srcGenFolder.exists()) {
 					try {
-						System.out.println("Src-Gen folder does not yet exist");
 						srcGenFolder.create(true, true, new NullProgressMonitor());
 					} catch (CoreException e) {
 						return null;
 					}
 				}
-				
+
 				MessageDialog.openInformation(window.getShell(), "You have clicked on a valid source file",
-						"ABAP Code Generation starts with" + "\n\n"
-						+ "Project path: " + project.getName().toString() + "\n"
-						+ "SrcGen path: " + srcGenFolder.getName().toString() + "\n"
-						+ "File path: " + file.getFullPath().toString());
-				System.out.println("Project path: " + project.getName().toString());
-				System.out.println("SrcGen path: " + srcGenFolder.getName().toString());
-				System.out.println("File path: " + file.getFullPath().toString());			
-				
-//				final EclipseResourceFileSystemAccess2 fsa = new EclipseResourceFileSystemAccess2();
-//				fsa.setOutputPath(srcGenFolder.getFullPath().toString());
-//				fsa.setProject(project);
-//				fsa.setMonitor(new NullProgressMonitor());
-//				fsa.setPostProcessor(new EclipseResourceFileSystemAccess2.IFileCallback() {
-//					@Override
-//					public boolean beforeFileDeletion(IFile arg0) {
-//						return true;
-//					}
-//					@Override
-//					public void afterFileUpdate(IFile arg0) {						
-//					}
-//					@Override
-//					public void afterFileCreation(IFile arg0) {		
-//						System.out.println("File created " + arg0.getFullPath().toString());
-//					}
-//				});
-				
+						"ABAP Code Generation starts with" + "\n\n" + "Project path: " + project.getName().toString()
+								+ "\n" + "SrcGen path: " + srcGenFolder.getName().toString() + "\n" + "File path: "
+								+ file.getFullPath().toString());
+
 				JavaIoFileSystemAccess fsa = new JavaIoFileSystemAccess();
 				fsa.setOutputPath(srcGenFolder.getLocation().toOSString());
 				Guice.createInjector(new AbstractGenericModule() {
@@ -83,15 +62,21 @@ public class ConvertHandler extends AbstractHandler {
 						return IEncodingProvider.Runtime.class;
 					}
 				}).injectMembers(fsa);
-				
-			    URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+
+				URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 				ResourceSet rs = new ResourceSetImpl();
 				rs.getPackageRegistry().put(UMLPackage.eNS_URI, UMLPackage.eINSTANCE);
-				rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put(UMLResource.FILE_EXTENSION, UMLResource.Factory.INSTANCE);
+				rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put(UMLResource.FILE_EXTENSION,
+						UMLResource.Factory.INSTANCE);
 				Resource r = rs.getResource(uri, true);
 
-				MainGenerator Generator = new MainGenerator();
-				Generator.doGenerate(r, fsa);
+				Generator Generator = new Generator();
+				List<ICodeGenArtefact> result = Generator.doGenerate(r);
+
+				for (ICodeGenArtefact artefact : result) {
+					fsa.generateFile(artefact.getName() + ".txt", artefact.getCode());
+				}
+
 			}
 		}
 		return null;

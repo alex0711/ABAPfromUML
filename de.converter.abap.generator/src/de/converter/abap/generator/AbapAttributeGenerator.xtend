@@ -13,8 +13,9 @@ class AbapAttributeGenerator {
 		«ENDFOR»
 	'''
 
-	static def generateSingleAttribute(Property property) '''
+	static def generateSingleAttribute(
+		Property property) '''
 		«AbapDocGenerator.generateAbapDoc(property)»
-		«IF property.isStatic»CLASS-«ENDIF»DATA «property.name» TYPE «IF property.type != null»«property.type.name»«ELSE»ANY«ENDIF».
+		«IF property.isStatic»CLASS-«ENDIF»DATA «property.name.toLowerCase» TYPE «IF property.type != null»«property.type.name.toLowerCase»«ELSE»ANY«ENDIF».
 	'''
 }

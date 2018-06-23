@@ -1,43 +1,32 @@
-
 package de.converter.abap.generator;
 
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Class;
 
-public final class CodeGenFacade implements IFCodeGen {
+public class CodeGenFacade {
 
 	private Classifier classifier;
-	private final String constantClass = "CLASS";
-	private final String constantInterface = "INTERFACE";
 
-	@Override
-	public CharSequence getCode() {
-		String classifierType = getClassifierType(getClassifier());
-		System.out.println("Classifier Type: " + classifierType);
+	public ICodeGenArtefact getCodeGenArtefact() throws CodeGenerationException {
+		CharSequence code = "";
+		ECodeGenTypes type = null;
+		String packageName = classifier.getPackage().getName();
+		String name = classifier.getName();
 
-		if (classifierType.equals(constantClass)) {
-			System.out.println("Convert Class");
-			return AbapClassGenerator.getCode((Class) getClassifier());
-		} else if (classifierType.equals(constantInterface)) {
-			System.out.println("Convert Interface");
-			return AbapInterfaceGenerator.getCode((Interface) getClassifier());
+		if (classifier instanceof Class) {
+			code = AbapClassGenerator.getCode((Class) classifier);
+			type = ECodeGenTypes.CLASS;
+		} else if (classifier instanceof Interface) {
+			code = AbapInterfaceGenerator.getCode((Interface) classifier);
+			type = ECodeGenTypes.INTERFACE;
 		} else {
-			return null;
+			throw new CodeGenerationException("Unsupported Type");
 		}
+		return new CodeGenArtefact(type, packageName, name, code);
 	}
 
-	@Override
-	public String getClassifierType(Classifier classifier) {
-		return classifier.getClass().getSimpleName().toString().toUpperCase().replace("IMPL", "");
-	}
-
-	private Classifier getClassifier() {
-		return classifier;
-	}
-
-	@Override
-	public void setClassifier(Classifier classifier) {
+	public CodeGenFacade(Classifier classifier) {
 		this.classifier = classifier;
 	}
 }

@@ -7,10 +7,12 @@ class AbapClassGenerator {
 	
  	static def getCode(Class umlClass)'''
 	«generateClassHeader(umlClass)»
+		
 		PUBLIC SECTION.
 		«AbapInterfaceRealizationGeneration.generateInterfaceRealization(umlClass).toString.trim»
 		
 		«AbapInterfaceRealizationGeneration.generateInterfaceMethodDefinition(umlClass).toString.trim»
+		
 		«AbapMethodGenerator.generateMethods(umlClass.ownedOperations, VisibilityKind.PUBLIC_LITERAL).toString.trim»
 		
 		«AbapAttributeGenerator.generateAttributes(umlClass.ownedAttributes, VisibilityKind.PUBLIC_LITERAL).toString.trim»
@@ -28,11 +30,16 @@ class AbapClassGenerator {
 	
 	CLASS «umlClass.name» IMPLEMENTATION.
 	
+		«AbapInterfaceRealizationGeneration.generateInterfaceMethodImplementation(umlClass)»
+		
+		«AbapMethodGenerator.generateMethodsImplementation(umlClass.ownedOperations)»
+
 	ENDCLASS.
 	'''
 	
 	static def generateClassHeader(Class umlClass)'''
-	CLASS «umlClass.name»«IF umlClass.isAbstract» ABSTRACT «ENDIF»«IF umlClass.generalizations.length > 0» INHERITING FROM «umlClass.generalizations.get(0).general.name.toString»«ENDIF» DEFINITION.
-		PUBLIC FINAL CREATE PUBLIC.
+	CLASS «umlClass.name.toUpperCase»«IF umlClass.isAbstract» ABSTRACT «ENDIF»«IF umlClass.generalizations.length > 0» INHERITING FROM «umlClass.generalizations.get(0).general.name.toString»«ENDIF» DEFINITION.
+		PUBLIC
+		CREATE PUBLIC.
 	'''
 }

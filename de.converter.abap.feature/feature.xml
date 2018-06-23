@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="de.converter.abap.feature"
+      label="Feature"
+      version="1.0.0.qualifier">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.uml2.uml" version="5.2.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.11.1" match="greaterOrEqual"/>
+      <import plugin="com.google.guava"/>
+      <import plugin="org.eclipse.xtext.xbase.lib"/>
+      <import plugin="org.eclipse.xtend.lib"/>
+      <import plugin="org.eclipse.xtend.lib.macro"/>
+      <import plugin="org.eclipse.xtext" version="2.10.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.core" version="3.12.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.expressions" version="3.5.100" match="greaterOrEqual"/>
+      <import plugin="de.converter.abap.generator" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.builder" version="2.10.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.ui" version="2.10.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.papyrus.uml.tools.utils"/>
+   </requires>
+
+   <plugin
+         id="de.converter.abap.generator"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.converter.abap.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
